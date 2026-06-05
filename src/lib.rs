@@ -10,14 +10,25 @@ use syn::{parse_macro_input, Attribute, Data, DeriveInput, Fields, LitByteStr, V
 
 /// Derives `FromSql` trait for PostgreSQL enum types
 /// 
-/// Requires: `#[diesel(sql_type = "EnumTypeName")]` attribute
-/// 
+/// This macro automatically implements the `diesel::deserialize::FromSql` trait,
+/// allowing your Rust enum to be deserialized from PostgreSQL enum values.
+///
+/// # Requirements
+/// - Must be applied to an enum with unit variants only
+/// - Requires the `#[diesel(sql_type = "EnumTypeName")]` attribute
+/// - The SQL type name must match the PostgreSQL enum type name
+///
 /// # Example
 /// ```ignore
 /// #[derive(FromSqlDerive)]
 /// #[diesel(sql_type = "PaymentTypeT")]
 /// enum PaymentType { Card, Bank, Wire }
 /// ```
+///
+/// # Panics
+/// - If applied to a non-enum type
+/// - If the enum has variants with fields (only unit variants are supported)
+/// - If the `diesel(sql_type = "...")` attribute is missing
 #[proc_macro_derive(FromSqlDerive, attributes(diesel))]
 pub fn from_sql_derive(input: TokenStream) -> TokenStream {
     let DeriveInput {
@@ -51,6 +62,27 @@ pub fn from_sql_derive(input: TokenStream) -> TokenStream {
     gen.into()
 }
 
+/// Derives `ToSql` trait for PostgreSQL enum types
+/// 
+/// This macro automatically implements the `diesel::serialize::ToSql` trait,
+/// allowing your Rust enum to be serialized to PostgreSQL enum values.
+///
+/// # Requirements
+/// - Must be applied to an enum with unit variants only
+/// - Requires the `#[diesel(sql_type = "EnumTypeName")]` attribute
+/// - The SQL type name must match the PostgreSQL enum type name
+///
+/// # Example
+/// ```ignore
+/// #[derive(ToSqlDerive)]
+/// #[diesel(sql_type = "PaymentTypeT")]
+/// enum PaymentType { Card, Bank, Wire }
+/// ```
+///
+/// # Panics
+/// - If applied to a non-enum type
+/// - If the enum has variants with fields (only unit variants are supported)
+/// - If the `diesel(sql_type = "...")` attribute is missing
 #[proc_macro_derive(ToSqlDerive, attributes(diesel))]
 pub fn to_sql_derive(input: TokenStream) -> TokenStream {
     let DeriveInput {
