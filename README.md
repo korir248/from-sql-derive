@@ -1,5 +1,9 @@
 # Diesel Enum Derive Macro
 
+[![downloads](https://img.shields.io/crates/d/diesel-enum-sqltype.svg)](https://crates.io/crates/diesel-enum-sqltype)
+[![docs.rs](https://docs.rs/diesel-enum-sqltype/badge.svg)](https://docs.rs/diesel-enum-sqltype)
+
+
 ## Overview
 
 A Rust procedural macro library that provides custom derive macros `FromSqlDerive` and `ToSqlDerive` for seamless PostgreSQL enum serialization and deserialization with Diesel ORM.
