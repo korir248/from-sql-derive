@@ -8,6 +8,16 @@ use syn::punctuated::Punctuated;
 use syn::token::{Comma, Eq};
 use syn::{parse_macro_input, Attribute, Data, DeriveInput, Fields, LitByteStr, Variant};
 
+/// Derives `FromSql` trait for PostgreSQL enum types
+/// 
+/// Requires: `#[diesel(sql_type = "EnumTypeName")]` attribute
+/// 
+/// # Example
+/// ```ignore
+/// #[derive(FromSqlDerive)]
+/// #[diesel(sql_type = "PaymentTypeT")]
+/// enum PaymentType { Card, Bank, Wire }
+/// ```
 #[proc_macro_derive(FromSqlDerive, attributes(diesel))]
 pub fn from_sql_derive(input: TokenStream) -> TokenStream {
     let DeriveInput {
